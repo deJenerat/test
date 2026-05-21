@@ -1,4 +1,4 @@
-package com.example;
+package com.example.config;
 
 import com.zaxxer.hikari.HikariConfig;//импорт для пула соединений
 import com.zaxxer.hikari.HikariDataSource;
@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 @Configuration//класс с настройками
+@ComponentScan(basePackages = "com.example")//**
 @EnableJpaRepositories("com.example")//вкл sJPA ->ищи репоз. тут (UserRep)
 @EnableTransactionManagement//вкл транзакции(@Transactional)
 @PropertySource("classpath:application.properties")
