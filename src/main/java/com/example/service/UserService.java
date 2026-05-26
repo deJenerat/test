@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor//синглтон
 @Transactional//публичные методы в транзакцию(begin-commit/rollback) над методом
 public class UserService {
-
+@Autowired
     //автоматически найдет бин UserRep и вставит сюда. Без @Autowired  UserRep userRepository = new UserRepImpl();
     private final UserRep userRepository;//объекты-реализация методов интерфейса(ссылка на о. в куче)
 

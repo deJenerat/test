@@ -8,10 +8,10 @@
     <groupId>com.example</groupId>
     <artifactId>spring-web</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>war</packaging><!-- Web Application Archive для Tomcat вместо jar-->
 
     <name>spring-web</name>
-    <description>Web application with Spring MVC and Thymeleaf</description>
+
 
     <properties>
         <!-- Java version -->
@@ -88,7 +88,7 @@
         </dependency>
 
         <!-- ====== THYMELEAF ====== -->
-
+        <!-- шаблонизатор (java-данные в HTML) вместо статической страницы-динамическая -->
         <dependency>
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf</artifactId>

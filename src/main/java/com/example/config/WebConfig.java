@@ -14,10 +14,10 @@ import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 
 @Configuration
-@EnableWebMvc
+@EnableWebMvc//вкл обработку http запросов
 @ComponentScan(basePackages = "com.example.controller")
 @Import(AppConfig.class)
-public class WebConfig implements WebMvcConfigurer, ApplicationContextAware {
+public class WebConfig implements WebMvcConfigurer, ApplicationContextAware {//возможность настр SMVC, доступ к контейнеру
 
     private ApplicationContext applicationContext;
 
@@ -30,7 +30,7 @@ public class WebConfig implements WebMvcConfigurer, ApplicationContextAware {
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
         resolver.setApplicationContext(applicationContext);
-        resolver.setPrefix("/WEB-INF/templates/");
+        resolver.setPrefix("/WEB-INF/templates/");//где HTML
         resolver.setSuffix(".html");
         resolver.setTemplateMode("HTML");
         resolver.setCacheable(false);
