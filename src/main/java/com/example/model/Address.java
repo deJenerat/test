@@ -17,13 +17,13 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column( length = 100)
     private String city;
 
-    @Column(nullable = false, length = 100)
+    @Column( length = 100)
     private String street;
 
-    @Column(nullable = false, length = 20)
+    @Column( length = 20)
     private String house;
 
     @OneToOne(mappedBy = "address")//ведомая - для удобства. поиск по ключу в address. адрес не знает о владельце,связь настроена уже в др классе

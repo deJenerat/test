@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Детали пользователя</title>
+  <style>
+    .card { border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px; background: #f9f9f9; }
+    .info-row { padding: 8px 0; border-bottom: 1px solid #eee; }
+    .label { font-weight: bold; display: inline-block; width: 120px; }
+    button { padding: 10px 20px; margin-right: 10px; cursor: pointer; border: none; border-radius: 4px; }
+    .back-btn { background-color: #2196F3; color: white; }
+    .edit-btn { background-color: #4CAF50; color: white; }
+  </style>
+</head>
+<body>
+<h1>👤 Информация о пользователе</h1>
+
+<div class="card">
+  <h3>Основные данные</h3>
+  <div class="info-row"><span class="label">ID:</span> <span th:text="${user.id}">1</span></div>
+  <div class="info-row"><span class="label">Имя:</span> <span th:text="${user.firstName}">Иван</span></div>
+  <div class="info-row"><span class="label">Фамилия:</span> <span th:text="${user.lastName}">Иванов</span></div>
+  <div class="info-row"><span class="label">Возраст:</span> <span th:text="${user.age}">25</span></div>
+</div>
+
+<div class="card" th:if="${user.address != null}">
+  <h3>🏠 Адрес</h3>
+  <div class="info-row"><span class="label">Город:</span> <span th:text="${user.address.city}">Москва</span></div>
+  <div class="info-row"><span class="label">Улица:</span> <span th:text="${user.address.street}">Тверская</span></div>
+  <div class="info-row"><span class="label">Дом:</span> <span th:text="${user.address.house}">15</span></div>
+</div>
+
+<div class="card" th:unless="${user.address != null}">
+  <p>⚠️ Адрес не указан</p>
+</div>
+
+<div>
+  <button class="back-btn" onclick="location.href='/users'">📋 К списку</button>
+  <button class="edit-btn" th:onclick="'location.href=\'/users/' + ${user.id} + '/edit\''">✏️ Редактировать</button>
+</div>
+</body>
+</html>
