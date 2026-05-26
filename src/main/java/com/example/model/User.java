@@ -27,9 +27,9 @@ public class User {
     private Integer age;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "address_id", unique = true)//запрет 2 пользователям 1 иметь адресс/будет many-to-one
+    @JoinColumn(name = "address_id", unique = true)//запрет 2 пользователям иметь 1 адресс/будет many-to-one
     @ToString.Exclude//на всякий случай
-    private Address address;
+    private Address address;//чтобы найти АДРЕС у ЮЗЕРА
 
     public User(String firstName, String lastName, Integer age) {
         this.firstName = firstName;

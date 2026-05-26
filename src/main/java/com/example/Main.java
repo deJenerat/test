@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
 
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);//контейнер(хранит бины) S читая конфиг
-        UserService userService = context.getBean(UserService.class);
+        UserService userService = context.getBean(UserService.class);//берет готовый UserService с внедренным UserRep
 
 
         System.out.println("Создание пользователей:");
@@ -121,12 +121,12 @@ public class Main {
         });
         System.out.println();
 
-        System.out.println("Удаление всех пользователей:");
-        long countBefore = userService.findAllUsers().size();
-        userService.deleteAllUsers();
-        long countAfter = userService.findAllUsers().size();
-        System.out.printf("Удалено пользователей: %d%n", countBefore);
-        System.out.printf("Осталось пользователей: %d%n", countAfter);
+//        System.out.println("Удаление всех пользователей:");
+//        long countBefore = userService.findAllUsers().size();
+//        userService.deleteAllUsers();
+//        long countAfter = userService.findAllUsers().size();
+//        System.out.printf("Удалено пользователей: %d%n", countBefore);
+//        System.out.printf("Осталось пользователей: %d%n", countAfter);
 
         ((AnnotationConfigApplicationContext) context).close();
     }
