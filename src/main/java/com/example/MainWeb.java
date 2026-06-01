@@ -12,11 +12,11 @@ public class MainWeb {
     public static void main(String[] args) throws Exception {
         Tomcat tomcat = new Tomcat();//создает новый веб сервер
         tomcat.setPort(8080);
+        tomcat.getConnector();
 
         // Проверка пути
         File webappDir = new File("src/main/webapp");//указ. томкету где файлы
         if (!webappDir.exists()) {
-            System.err.println("ERROR: webapp directory not found at " + webappDir.getAbsolutePath());
             System.exit(1);
         }
 
@@ -29,16 +29,11 @@ public class MainWeb {
             resources.addPreResources(new DirResourceSet(resources, "/WEB-INF/classes",
                     classesDir.getAbsolutePath(), "/"));
             ctx.setResources(resources);
-        } else {
-            System.err.println("WARNING: target/classes not found. Run 'mvn compile' first.");
+
         }
 
         tomcat.start();
-        System.out.println("Tomcat is listening on port: " + tomcat.getConnector().getPort());
-        System.out.println("Local address: " + tomcat.getConnector().getProperty("address"));
-        System.out.println("========================================");
         System.out.println("Сервер запущен: http://localhost:8080/users");
-        System.out.println("========================================");
         tomcat.getServer().await();
     }
 }

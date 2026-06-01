@@ -1,41 +1,46 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"> <!-- объявление что в html исп. thymeleaf (все начинается th:) -->
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Список пользователей</title>
-    <style>
-        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background-color: #4CAF50; color: white; }
-        button { padding: 5px 10px; margin: 0 2px; cursor: pointer; border: none; border-radius: 3px; }
-        .edit-btn { background-color: #2196F3; color: white; }
-        .delete-btn { background-color: #f44336; color: white; }
-        .add-btn { margin-top: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
-        .user-link { color: #2196F3; text-decoration: none; font-weight: bold; }
-    </style>
+    <title>Список пользователей</title> <!--заголовок страницы -->
 </head>
 <body>
-<h1>📋 Список пользователей</h1>
-<table>
-    <thead>
-    <tr><th>ID</th><th>Имя</th><th>Фамилия</th><th>Возраст</th><th>Действия</th></tr>
+
+<h1>Список пользователей</h1><!--заголовок 1 уровня -->
+
+<table border="1"> <!--таблица с рамкой толщиной 1 пиксель  -->
+    <thead><!--секция заголовка  -->
+    <tr><!--строка-->
+        <th>ID</th><!--ячейка -->
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Возраст</th>
+        <th>Действия</th>
+    </tr>
     </thead>
     <tbody>
-    <tr th:each="user : ${users}">
-        <td th:text="${user.id}">1</td>
-        <td><a class="user-link" th:href="@{/users/{id}(id=${user.id})}" th:text="${user.firstName}">Иван</a></td>
-        <td th:text="${user.lastName}">Иванов</td>
-        <td th:text="${user.age}">25</td>
+    <tr th:each="user : ${users}"><!--тело таблицы --цикл таймлифа -->
+        <td th:text="${user.id}">1</td><!--ячейка всталяется значение вместо текста 1 -->
         <td>
-            <button class="edit-btn" th:onclick="'location.href=\'/users/' + ${user.id} + '/edit\''">✏️ Изменить</button>
-            <button class="delete-btn" th:onclick="'if(confirm(\'Удалить пользователя?\')) location.href=\'/users/' + ${user.id} + '/delete\''">🗑️ Удалить</button>
+            <a th:href="@{/users/{id}(id=${user.id})}" th:text="${user.firstName}">Имя</a><!--создает ссылку, вставляет имя-->
+        </td>
+        <td th:text="${user.lastName}">Фамилия</td><!--ячейка -->
+        <td th:text="${user.age}">возраст</td><!--ячейка -->
+        <td>
+            <a th:href="@{/users/{id}/edit(id=${user.id})}">Изменить</a><!--кнопка, переход на форму -->
+            |
+            <a th:href="@{/users/{id}/delete(id=${user.id})}"
+               onclick="return confirm('Удалить пользователя?')">Удалить</a><!--кнопка -->
         </td>
     </tr>
     <tr th:if="${users.isEmpty()}">
-        <td colspan="5" style="text-align:center;">Нет пользователей</td>
+        <td colspan="5" align="center">Нет пользователей</td><!--обединяет 5 ячеек в 1, выравнивание-->
     </tr>
     </tbody>
 </table>
-<button class="add-btn" onclick="location.href='/users/new'">➕ Добавить пользователя</button>
+
+<br/>
+<a href="/users/new">Добавить пользователя</a><!--кнопка -->
+
 </body>
 </html>

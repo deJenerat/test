@@ -12,8 +12,10 @@ import jakarta.servlet.ServletRegistration;
 
 public class ApplicationInitializer implements WebApplicationInitializer {
 
+    private static final String DISPATCHER = "dispatcher";
+
     @Override
-    public void onStartup(ServletContext servletContext) {//томкет вызывает метод при запуске
+    public void onStartup(ServletContext servletContext) {//томкет вызывает метод при запуске(о через который мы рег. сервлеты и фильтр)
         //servletContext - это объект, через который мы регистрируем сервлеты и фильтры
 
         // создаём корневой контекст (AppConfig)
@@ -26,22 +28,21 @@ public class ApplicationInitializer implements WebApplicationInitializer {
         //теперь при старте приложения контейнер загрузится автоматически
 
         //создаём веб-контекст (WebConfig)
-        //контейнер для веб-слоя (контроллеры, Thymeleaf)
+        //контейнер для веб-слоя (контроллеры, Thymeleaf, ViewResolver)
         AnnotationConfigWebApplicationContext webContext = new AnnotationConfigWebApplicationContext();
         webContext.register(WebConfig.class);
-        webContext.setParent(rootContext);//связь с webConfig
+        webContext.setParent(rootContext);//связь webConfig(видит корневой)
 
-        //Регистрируем DispatcherServlet(главный) и регистрируем в томкэт
-        DispatcherServlet dispatcherServlet = new DispatcherServlet(webContext);
-        ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", dispatcherServlet);
-        dispatcher.setLoadOnStartup(1);//сразу после старта
-        dispatcher.addMapping("/");//все запросы направляем сюда
+        //Регистрируем DispatcherServlet(главный) и регистрируем в томкэт реализация frontController
+        ServletRegistration.Dynamic servlet=servletContext.addServlet(DISPATCHER, new DispatcherServlet(webContext));
+        servlet.setLoadOnStartup(1);//сразу после старта(LOAD_ON_STARTUP)
+        servlet.addMapping("/");//все запросы направляем сюда(URL_PATTERN)
 
         //фильтр кодировки
         CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
         encodingFilter.setEncoding("UTF-8");
         encodingFilter.setForceEncoding(true);
         servletContext.addFilter("characterEncodingFilter", encodingFilter)
-                .addMappingForUrlPatterns(null, false, "/*");
+                .addMappingForUrlPatterns(null, false, "/*");//ALL_URLS
     }
 }
