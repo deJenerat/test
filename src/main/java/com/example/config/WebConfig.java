@@ -1,55 +1,53 @@
 package com.example.config;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.thymeleaf.spring6.SpringTemplateEngine;
-import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
-import org.thymeleaf.spring6.view.ThymeleafViewResolver;
+import org.springframework.context.ApplicationContextAware;//чтобы контейнеру получить ссылку на самого себя (метод setApplicationContext() и передать себя)
+import org.springframework.context.annotation.Bean;//результат метода - бин
+import org.springframework.context.annotation.ComponentScan;//@C,@S
+import org.springframework.context.annotation.Configuration;// класс-конфигурация
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;//подкл web mvc (@getmapping, @postcontroller)
+import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;//из имени шаблона (index) в htlm страницу
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;//переопределить метод configureViewResolvers() (исп. thymeleaf для созд страниц)
+import org.thymeleaf.spring6.SpringTemplateEngine;//движок thymeleaf  (берет html шаблон и вставляет данные из java)
+import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;//ищет html файлы в нужной папке
+import org.thymeleaf.spring6.view.ThymeleafViewResolver;//когда Controller  возвр index надо прогнать через engine и отдать пользователю
 
-@Configuration
-@EnableWebMvc//вкл обработку http запросов
-@ComponentScan(basePackages = "com.example.controller")
-@Import(AppConfig.class)
-public class WebConfig implements WebMvcConfigurer, ApplicationContextAware {//возможность настр SMVC, доступ к контейнеру
+@Configuration//настройка приложения
+@EnableWebMvc//вкл обработку http запросов(@controller начинает работать+GetMapping,PostMapping обрабатывать запросы+возврат html страницы)
+@ComponentScan(basePackages = "com.example.controller")//ищет контроллеры и создает их бины
+public class WebConfig implements WebMvcConfigurer, ApplicationContextAware {//возможность настр SMVC, доступ к S контейнеру
 
-    private ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;//сюда спринг положит ссылку на контейнер(сам на себя)
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) {
+    public void setApplicationContext(ApplicationContext applicationContext) {//при создании получить ссылку на себя чтоы потом попросить доступ к файлам
         this.applicationContext = applicationContext;
     }
 
     @Bean
-    public SpringResourceTemplateResolver templateResolver() {
-        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
-        resolver.setApplicationContext(applicationContext);
-        resolver.setPrefix("/WEB-INF/templates/");//где HTML
-        resolver.setSuffix(".html");
-        resolver.setTemplateMode("HTML");
-        resolver.setCacheable(false);
+    public SpringResourceTemplateResolver templateResolver() {//бин - решатель шаблонов (знает где лежат html файлы)
+        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();//созд новый о-решатель
+        resolver.setApplicationContext(applicationContext);//дает решателю доступ к контейнеру чтобы он мог читать файлы из папки webapp
+        resolver.setPrefix("/WEB-INF/templates/");//в какой папке HTML файлы
+        resolver.setSuffix(".html");//расширение у всех файлов
+        resolver.setTemplateMode("HTML");//обрабатывай как html
+        resolver.setCacheable(false);//при каждом запросе читать файл заново(видеть изменения без перезапуска)
         return resolver;
     }
 
     @Bean
-    public SpringTemplateEngine templateEngine() {
-        SpringTemplateEngine engine = new SpringTemplateEngine();
-        engine.setTemplateResolver(templateResolver());
-        engine.setEnableSpringELCompiler(true);
+    public SpringTemplateEngine templateEngine() {//движок thymeleaf. берет HTLM шаблон и сам вставляет данные из java. отдает готовую страницу
+        SpringTemplateEngine engine = new SpringTemplateEngine();//созд новый движок
+        engine.setTemplateResolver(templateResolver());//передали решатель. движок будет его использовать когда нужно найти шаблон
+        engine.setEnableSpringELCompiler(true);//для сложных выражеий в html чтобы работать быстрее
         return engine;
     }
 
     @Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
-        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
-        resolver.setTemplateEngine(templateEngine());
+    public void configureViewResolvers(ViewResolverRegistry registry) {//регистрирует Thymeleaf как основной способ превращения Java-данных в HTML страницы.
+        ThymeleafViewResolver resolver = new ThymeleafViewResolver();//созд. веб реселвер(имена шаблонов в готовые html страницы)
+        resolver.setTemplateEngine(templateEngine());//передали движок чтобы обрабатывать шаблоны
         resolver.setCharacterEncoding("UTF-8");
-        registry.viewResolver(resolver);
+        registry.viewResolver(resolver);// когда контроллер возвращает "index", Spring знает, что надо использовать ThymeleafViewResolver
     }
 }

@@ -10,11 +10,11 @@ import java.io.File;
 
 public class MainWeb {
     public static void main(String[] args) throws Exception {
-        Tomcat tomcat = new Tomcat();
+        Tomcat tomcat = new Tomcat();//создает новый веб сервер
         tomcat.setPort(8080);
 
         // Проверка пути
-        File webappDir = new File("src/main/webapp");
+        File webappDir = new File("src/main/webapp");//указ. томкету где файлы
         if (!webappDir.exists()) {
             System.err.println("ERROR: webapp directory not found at " + webappDir.getAbsolutePath());
             System.exit(1);
@@ -22,7 +22,7 @@ public class MainWeb {
 
         StandardContext ctx = (StandardContext) tomcat.addWebapp("/", webappDir.getAbsolutePath());
 
-        // Добавляем классы в classpath Tomcat
+        // Добавляем классы в classpath Tomcat (чтобы найти usercontroller, userservice и тд)
         File classesDir = new File("target/classes");
         if (classesDir.exists()) {
             WebResourceRoot resources = new StandardRoot(ctx);

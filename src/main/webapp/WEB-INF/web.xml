@@ -7,7 +7,7 @@
 
     <display-name>Spring Web Application</display-name>
 
-    <!-- Фильтр кодировки -->
+    <!-- Фильтр кодировки  для русских букв-->
     <filter>
         <filter-name>characterEncodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -24,7 +24,7 @@
         <filter-name>characterEncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
+<!-- нужно искать в классах с аннотациями а не в XML  -->
     <context-param>
         <param-name>contextClass</param-name>
         <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
@@ -35,10 +35,12 @@
         <param-value>com.example.config</param-value>
     </context-param>
 
+    <!-- загружает контейнер при старте томката -->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+    <!-- главный сервлет кот. обрабат. все запросы. смотрит url находит нужынй метод в UserController -->
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -55,7 +57,7 @@
 
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/</url-pattern> <!-- url шаблон (/)-->
     </servlet-mapping>
 
 </web-app>

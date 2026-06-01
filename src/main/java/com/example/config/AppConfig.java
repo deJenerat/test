@@ -27,7 +27,7 @@ public class AppConfig {
 
     @Bean//создание бина подключения к БД
     public DataSource dataSource() throws IOException {
-        {// создает о. которым будет управлять S (возвр о. который умеет создавать соед)
+        // создает о. которым будет управлять S (возвр о. который умеет создавать соед)
             Properties props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("application.properties"));
             HikariConfig config = new HikariConfig();//обект настр. пула соед(кеш готовых соед)
             config.setDriverClassName(props.getProperty("jdbc.driver"));
@@ -35,13 +35,12 @@ public class AppConfig {
             config.setUsername(props.getProperty("jdbc.username"));
             config.setPassword(props.getProperty("jdbc.password"));
             return new HikariDataSource(config);//созд и возвр пул с этими настр
-        }
+
     }
 
     @Bean//бин превращения Java-объектов в таблицы
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) throws IOException {
         {//( ...S сам найдет м передаст бин )
-            Properties props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("application.properties"));//необязательно
             LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();//о.-фабрикка
             emf.setDataSource(dataSource);//передача в фабрику пул, чтобы Hiber знал как подкл. к БД
             emf.setPackagesToScan("com.example"); // ищем @Entity в папке

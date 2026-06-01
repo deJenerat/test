@@ -10,44 +10,44 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/users")
+@Controller//обработчик веб-запросов
+@RequestMapping("/users")//методы доступны по URL типа http://localhost:8080/users
 public class UserController {
 
     @Autowired
     private UserService userService;
 
     @GetMapping
-    public String listUsers(Model model) {
+    public String listUsers(Model model) {//обработчик get - запроса
         List<User> users = userService.findAllUsers();
         model.addAttribute("users", users);
-        return "index";
+        return "index";//покажи страницу index.html
     }
 
     @GetMapping("/{id}")
-    public String viewUser(@PathVariable Long id, Model model) {
+    public String viewUser(@PathVariable Long id, Model model) {//Обработчик GET запроса на /users/id
         User user = userService.findUserById(id)
                 .orElseThrow(() -> new RuntimeException("User not found: " + id));
         model.addAttribute("user", user);
-        return "user-details";
+        return "user-details";//показывает user-details.html.
     }
 
-    @GetMapping("/new")
+    @GetMapping("/new")// /users/new
     public String showCreateForm(Model model) {
         model.addAttribute("user", new User());
-        return "user-form";
+        return "user-form";//Создаёт пустого пользователя, кладёт в модель, показывает форму.
     }
 
-    @GetMapping("/{id}/edit")
-    public String showEditForm(@PathVariable Long id, Model model) {
-        User user = userService.findUserById(id)
+    @GetMapping("/{id}/edit")// Обработчик GET
+    public String showEditForm(@PathVariable Long id, Model model) { //Находит пользователя по ID, кладёт в модель (с уже заполненными полями),
+        User user = userService.findUserById(id)//  показывает ту же форму, но с данными.
                 .orElseThrow(() -> new RuntimeException("User not found: " + id));
         model.addAttribute("user", user);
         return "user-form";
     }
 
-    @PostMapping("/save")
-    public String saveUser(@ModelAttribute User user) {
+    @PostMapping("/save")//Обработчик POST запроса
+    public String saveUser(@ModelAttribute User user) {// Принимает данные из формы, превращает их в объект User
         // Проверяем, что адрес не создаётся автоматически
         if (user.getAddress() != null) {
             Address address = user.getAddress();
@@ -68,7 +68,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @GetMapping("/{id}/delete")
+    @GetMapping("/{id}/delete")// Обработчик GET
     public String deleteUser(@PathVariable Long id) {
         userService.deleteUserById(id);
         return "redirect:/users";
