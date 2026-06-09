@@ -71,7 +71,7 @@ public class UserController {
             // Если все поля адреса пустые - не сохраняем адрес
             log.debug("Проверка адреса: город='{}', улица='{}', дом='{}'",
                     address.getCity(), address.getStreet(), address.getHouse());
-            if ((address.getCity() == null || address.getCity().trim().isEmpty()) &&
+                if ((address.getCity() == null || address.getCity().trim().isEmpty()) &&
                     (address.getStreet() == null || address.getStreet().trim().isEmpty()) &&
                     (address.getHouse() == null || address.getHouse().trim().isEmpty())) {
                 user.setAddress(null);

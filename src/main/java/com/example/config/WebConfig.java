@@ -46,7 +46,6 @@ public class WebConfig implements WebMvcConfigurer, ApplicationContextAware {//�
         SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();//созд новый о-решатель
         resolver.setApplicationContext(applicationContext);//дает решателю доступ к контейнеру чтобы он мог читать файлы из папки webapp
 
-        resolver.setApplicationContext(applicationContext);
         resolver.setPrefix(TEMPLATES_PREFIX);
         resolver.setSuffix(TEMPLATES_SUFFIX);
         resolver.setTemplateMode(TEMPLATE_MODE);

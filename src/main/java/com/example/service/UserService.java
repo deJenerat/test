@@ -3,10 +3,7 @@ package com.example.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.example.model.User;
-import com.example.model.Address;
 import com.example.repository.UserRep;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +16,6 @@ public class UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    //автоматически найдет бин UserRep и вставит сюда. Без @Autowired  UserRep userRepository = new UserRepImpl();
     private final UserRep userRepository;//объекты-реализация методов интерфейса(ссылка на о. в куче)
 
     public UserService(UserRep userRepository) {
@@ -50,24 +46,6 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public User updateUser(Long id, String firstName, String lastName, Integer age) {
-        log.info("Обновление пользователя с id={}", id);
-
-        Optional<User> existing = userRepository.findById(id);
-        if (existing.isPresent()) {
-            User user = existing.get();
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setAge(age);
-
-            User updatedUser = userRepository.save(user);
-            log.info("Пользователь с id={} обновлён", id);
-            return updatedUser;
-        }
-
-        log.error("Пользователь с id={} не найден", id);
-        return null;
-    }
 
     public void deleteUserById(Long id) {
         log.info("Удаление пользователя с id={}", id);

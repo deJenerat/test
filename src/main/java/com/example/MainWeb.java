@@ -12,7 +12,8 @@ import java.io.File;
 
 public class MainWeb {
     private static final Logger log = LoggerFactory.getLogger(MainWeb.class);
-    private static final int PORT = 8080; private static final String WEBAPP_PATH = "src/main/webapp";
+    private static final int PORT = 8080;
+    private static final String WEBAPP_PATH = "src/main/webapp";
     private static final String CONTEXT_PATH = "/";
     private static final String CLASSES_PATH = "/WEB-INF/classes";
 
@@ -31,7 +32,7 @@ public class MainWeb {
         }
         log.debug("Папка webapp найдена: {}", webappDir.getAbsolutePath());
 
-        StandardContext ctx = (StandardContext) tomcat.addWebapp("/", webappDir.getAbsolutePath());
+        StandardContext ctx = (StandardContext) tomcat.addWebapp(CONTEXT_PATH, webappDir.getAbsolutePath());
 
         // Добавляем классы в classpath Tomcat (чтобы найти usercontroller, userservice и тд)
         File classesDir = new File("target/classes");
@@ -39,8 +40,8 @@ public class MainWeb {
             log.debug("Папка с классами найдена: {}", classesDir.getAbsolutePath());
 
             WebResourceRoot resources = new StandardRoot(ctx);
-            resources.addPreResources(new DirResourceSet(resources, "/WEB-INF/classes",
-                    classesDir.getAbsolutePath(), "/"));
+            resources.addPreResources(new DirResourceSet(resources, CLASSES_PATH,
+                    classesDir.getAbsolutePath(), CONTEXT_PATH));
             ctx.setResources(resources);
             log.debug("Классы добавлены в classpath Tomcat");
 
