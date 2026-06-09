@@ -1,5 +1,7 @@
 package com.example.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.zaxxer.hikari.HikariConfig;//импорт для пула соединений(настройка)
 import com.zaxxer.hikari.HikariDataSource;//пул
 import org.springframework.context.annotation.*;
@@ -25,8 +27,11 @@ import java.util.Properties;
 @PropertySource("classpath:application.properties")
 public class AppConfig {
 
+    private static final Logger log = LoggerFactory.getLogger(AppConfig.class);
+
     @Bean//создание бина подключения к БД
     public DataSource dataSource() throws IOException {
+        log.info("Создание DataSource (HikariCP пул соединений)");
         // создает о. которым будет управлять S (возвр о. который умеет создавать соед)
             Properties props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("application.properties"));
             HikariConfig config = new HikariConfig();//обект настр. пула соед(кеш готовых соед)
@@ -41,6 +46,7 @@ public class AppConfig {
     @Bean//бин превращения Java-объектов в таблицы
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) throws IOException {
         {//( ...S сам найдет м передаст бин )
+            log.info("Создание EntityManagerFactory (Hibernate)");
             LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();//о.-фабрикка
             emf.setDataSource(dataSource);//передача в фабрику пул, чтобы Hiber знал как подкл. к БД
             emf.setPackagesToScan("com.example"); // ищем @Entity в папке
@@ -50,14 +56,16 @@ public class AppConfig {
             Properties jpaProperties = PropertiesLoaderUtils.loadProperties(
                     (new ClassPathResource("application.properties")));
             emf.setJpaProperties(jpaProperties);
-
+            log.info("EntityManagerFactory создана");
             return emf;//возвр фабрику спрингу
         }
     }
     @Bean//бин транзакций - как работать с бд(begin-commit-rollback) автоматом оборачивает в транзакцию где аннотация
     public PlatformTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean emf) {//emf сам найдет и передаст
+        log.info("Создание TransactionManager (управление транзакциями)");
         JpaTransactionManager tm = new JpaTransactionManager();//о. управления транзакциями(JPA реализация)
         tm.setEntityManagerFactory(emf.getObject());//getObject() извлекает настоящий EntityManagerFactory из бина
+        log.info("TransactionManager создан");
         return tm;//возвр менеджер транз. спрингу
     }
 }

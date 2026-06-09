@@ -2,16 +2,43 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Список пользователей</title> <!--заголовок страницы -->
+    <title>Список пользователей</title>
 </head>
 <body>
 
-<h1>Список пользователей</h1><!--заголовок 1 уровня -->
+<h1>Список пользователей</h1>
 
-<table border="1"> <!--таблица с рамкой толщиной 1 пиксель  -->
-    <thead><!--секция заголовка  -->
-    <tr><!--строка-->
-        <th>ID</th><!--ячейка -->
+<!-- БЛОК ПОИСКА -->
+<h3>Поиск пользователей</h3>
+
+<!-- Форма по дому -->
+<form action="/users/search/house" method="get">
+    <input type="text" name="house" placeholder="Введите номер дома" required/>
+    <button type="submit">Найти по дому</button>
+</form>
+
+<br/>
+
+<!-- форма по городу -->
+<form action="/users/search/city" method="get">
+    <input type="text" name="city" placeholder="Введите город" required/>
+    <button type="submit">Найти по городу</button>
+</form>
+
+<br/>
+
+<!-- кнопка удаления всех -->
+<form action="/users/delete-all" method="post" onsubmit="return confirm('ВНИМАНИЕ! Вы уверены, что хотите удалить ВСЕХ пользователей?');">
+    <button type="submit" style="background-color: red; color: white;">Удалить всех</button>
+</form>
+
+<hr/>
+
+<!-- табличка с юзерами -->
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
         <th>Имя</th>
         <th>Фамилия</th>
         <th>Возраст</th>
@@ -19,28 +46,29 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="user : ${users}"><!--тело таблицы --цикл таймлифа -->
-        <td th:text="${user.id}">1</td><!--ячейка всталяется значение вместо текста 1 -->
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}">1</td>
         <td>
-            <a th:href="@{/users/{id}(id=${user.id})}" th:text="${user.firstName}">Имя</a><!--создает ссылку, вставляет имя-->
+            <a th:href="@{/users/{id}(id=${user.id})}" th:text="${user.firstName}">Имя</a>
         </td>
-        <td th:text="${user.lastName}">Фамилия</td><!--ячейка -->
-        <td th:text="${user.age}">возраст</td><!--ячейка -->
+        <td th:text="${user.lastName}">Фамилия</td>
+        <td th:text="${user.age}">возраст</td>
         <td>
-            <a th:href="@{/users/{id}/edit(id=${user.id})}">Изменить</a><!--кнопка, переход на форму -->
+            <a th:href="@{/users/{id}/edit(id=${user.id})}">Изменить</a>
             |
             <a th:href="@{/users/{id}/delete(id=${user.id})}"
-               onclick="return confirm('Удалить пользователя?')">Удалить</a><!--кнопка -->
+               onclick="return confirm('Удалить пользователя?')">Удалить</a>
         </td>
-    </tr>
-    <tr th:if="${users.isEmpty()}">
-        <td colspan="5" align="center">Нет пользователей</td><!--обединяет 5 ячеек в 1, выравнивание-->
-    </tr>
-    </tbody>
+</table>
+<tr th:if="${users.isEmpty()}">
+    <td colspan="5" align="center">Нет пользователей</td>
+</tr>
+</tbody>
 </table>
 
 <br/>
-<a href="/users/new">Добавить пользователя</a><!--кнопка -->
+<a href="/users/new">Добавить пользователя</a>
+
 
 </body>
 </html>
